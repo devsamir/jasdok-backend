@@ -7,6 +7,7 @@ import { format, parse } from "date-fns";
 import catchAsync from "../utils/catchAsync";
 import { convertExcelKey } from "../helper/rajal.helper";
 import Rajal from "../entities/rajal";
+import Dokter from "../entities/dokter";
 
 const multerStorage = multer.diskStorage({
   destination: (req, file, cb) => {
@@ -87,4 +88,27 @@ const deleteRajal = catchAsync(
     res.status(204).json(null);
   }
 );
-export { uploadExcelRajal, importDataRajal, deleteRajal };
+
+const kalibrasiDokter = catchAsync(
+  async (req: Request, res: Response, next: NextFunction): Promise<void> => {
+    const { tanggalAwal, tanggalAkhir } = req.body;
+    const manager = getManager();
+    const dokter = await manager
+      .createQueryBuilder(Dokter, "d")
+      .select("distinct(d.dokterLocal)")
+      .getRawMany();
+    for (const item of dokter) {
+      manager
+        .createQueryBuilder()
+        .update(Rajal)
+        .set({ dpjp: item.dokterLocal })
+        .where(
+          "dpjp in (select dokterIna from dokter where dokterLocal=:dokterLocal) and dischargeDate between :tanggalAwal and :tanggalAkhir",
+          { dokterLocal: item.dokterLocal, tanggalAwal, tanggalAkhir }
+        )
+        .execute();
+    }
+    res.status(200).json("Berhasil Kalibrasi Dokter");
+  }
+);
+export { uploadExcelRajal, importDataRajal, deleteRajal, kalibrasiDokter };

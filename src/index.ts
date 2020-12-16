@@ -10,8 +10,10 @@ import "reflect-metadata";
 import errorHandler from "./utils/errorHandler";
 // ENTITIES
 import Rajal from "./entities/rajal";
+import Dokter from "./entities/dokter";
 // ROUTER
 import rajalRouter from "./routes/rajal.routes";
+import dokterRouter from "./routes/dokter.routes";
 dotenv.config();
 
 // Router
@@ -27,7 +29,7 @@ const main = async (): Promise<void> => {
       database: process.env.DB_NAME,
       synchronize: true,
       logging: true,
-      entities: [Rajal],
+      entities: [Rajal, Dokter],
     });
     console.log("Database Connected");
 
@@ -42,6 +44,7 @@ const main = async (): Promise<void> => {
 
     //   ROUTE
     app.use("/api/v1/rajal", rajalRouter);
+    app.use("/api/v1/dokter", dokterRouter);
     app.use(errorHandler);
     const port = process.env.PORT;
 
