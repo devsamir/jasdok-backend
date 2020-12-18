@@ -11,6 +11,7 @@ import errorHandler from "./utils/errorHandler";
 // ENTITIES
 import Rajal from "./entities/rajal";
 import Dokter from "./entities/dokter";
+import Sri from "./entities/sri";
 // ROUTER
 import rajalRouter from "./routes/rajal.routes";
 import dokterRouter from "./routes/dokter.routes";
@@ -29,7 +30,7 @@ const main = async (): Promise<void> => {
       database: process.env.DB_NAME,
       synchronize: true,
       logging: true,
-      entities: [Rajal, Dokter],
+      entities: [Rajal, Dokter, Sri],
     });
     console.log("Database Connected");
 
