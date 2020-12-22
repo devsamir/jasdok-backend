@@ -15,6 +15,7 @@ import Sri from "./entities/sri";
 // ROUTER
 import rajalRouter from "./routes/rajal.routes";
 import dokterRouter from "./routes/dokter.routes";
+import rekapRouter from "./routes/rekap.routes";
 dotenv.config();
 
 // Router
@@ -46,6 +47,7 @@ const main = async (): Promise<void> => {
     //   ROUTE
     app.use("/api/v1/rajal", rajalRouter);
     app.use("/api/v1/dokter", dokterRouter);
+    app.use("/api/v1/rekap", rekapRouter);
     app.use(errorHandler);
     const port = process.env.PORT;
 

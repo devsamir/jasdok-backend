@@ -111,6 +111,15 @@ const kalibrasiDokter = catchAsync(
           { dokterLocal: item.dokterLocal, tanggalAwal, tanggalAkhir }
         )
         .execute();
+      manager
+        .createQueryBuilder()
+        .update(Sri)
+        .set({ dpjp: item.dokterLocal })
+        .where(
+          "dpjp in (select dokterIna from dokter where dokterLocal=:dokterLocal)",
+          { dokterLocal: item.dokterLocal }
+        )
+        .execute();
     }
     res.status(200).json("Berhasil Kalibrasi Dokter");
   }
